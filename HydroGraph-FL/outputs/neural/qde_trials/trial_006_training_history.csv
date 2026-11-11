@@ -1,0 +1,2 @@
+epoch,train_scaled_mse,validation_mae_ntu,valid_physics_constraints
+1,0.12507334280204266,1.2420669429642814,0
