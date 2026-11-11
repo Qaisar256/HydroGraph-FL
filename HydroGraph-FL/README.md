@@ -49,3 +49,30 @@ Use `--device cuda` if CUDA-enabled PyTorch is available. Modify `configs/defaul
 ## Original surrogate benchmark
 
 `src/legacy_surrogate_benchmark.py` preserves the earlier linear benchmark code. The previously generated surrogate metrics live in the earlier separately delivered project. Do not mix its model results with actual new GRU–GNN evaluations.
+
+## WQP–USGS field-data downloader (2019–2025)
+
+The repository includes a **separate observational-data acquisition workflow**. It does not relabel the simulation-derived CSVs as observed data. It uses the **modern USGS daily values OGC API** (discharge 00060, mean statistic 00003), plus the **WQP WQX3 result download API** for discrete turbidity samples. An older WQP endpoint is a fallback for compatibility. The legacy USGS WaterServices API is not required.
+
+```bash
+python scripts/download_field_data.py --start 2019-01-01 --end 2025-12-31
+python scripts/download_field_data.py --sites 01570500 01576000 --continue-on-error
+```
+
+The downloader writes source snapshots to `data/field_raw/` and the following auditable CSV outputs to `data/field_processed/`:
+
+- `daily_discharge_all_sites.csv` (USGS daily discharge, cfs and m³/s)
+- `discrete_turbidity_all_sites.csv` (WQP individual observations, units preserved)
+- `matched_turbidity_discharge.csv` (exact station/date join, retaining multiple discrete samples)
+- `daily_calendar_with_missingness.csv` (calendar and observed-sample indicator through missing cells)
+- `download_manifest.json` (source URLs, counts, failed stations, provenance)
+
+The demonstration station pair is Harrisburg `01570500` and Marietta `01576000`, Susquehanna River. The proposed link between them in `config/river_edge_candidates.csv` has **NOT** been verified using hydrological network tracing and **must not** be silently used as a directed neural edge. This pair does not form the seven-station graph required by the included simulated-data neural training code. No full-model real-field evaluation is claimed. WQP discrete results may be sparse, and measurement units such as NTU and FNU must not be pooled without defensible calibration.
+
+**Optional API key:** Set `USGS_API_KEY` in your environment for higher rate limits. See `.env.example`. Do not commit API keys.
+
+**API references:** https://api.waterdata.usgs.gov/docs/ogcapi/ , https://www.waterqualitydata.us/beta/webservices_documentation/
+
+## GitHub upload
+
+Create or use https://github.com/Qaisar256/HydroGraph-FL, extract the distributed ZIP archive, and push the extracted **contents** to the repository root. Run `python -m unittest discover -s tests -v` locally and inspect the git status before committing. The code contains training, evaluation, federated learning, QDE and source code for reproducible field data retrieval. GitHub publication does not imply any of the illustrative Table 7 neural model values are measured. The field downloader needs an internet connection and may depend on current availability of public services.
