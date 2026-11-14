@@ -1,0 +1,17 @@
+{
+  "data": "observed Ballycanew",
+  "input_features": [
+    "turbidity_ntu",
+    "turbidity_ntu_t_minus_1",
+    "discharge_original_Qcumecs_units_unverified",
+    "discharge_t_minus_1_original",
+    "trp_mg_l"
+  ],
+  "chronological_split_counts": [
+    1838,
+    365,
+    365
+  ],
+  "threshold": 9.26575,
+  "not_full_hydrograph_fl": true
+}

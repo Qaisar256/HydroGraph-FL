@@ -1,0 +1,2 @@
+upstream_site_id,downstream_site_id,topology_status,notes
+01570500,01576000,UNVERIFIED_CANDIDATE,"Both are Susquehanna mainstem gauges; verify routed connection and travel time using NLDI before graph modeling"

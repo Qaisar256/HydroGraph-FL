@@ -1,0 +1,5 @@
+dataset,split,model,n,MAE_NTU,RMSE_NTU,alert_threshold_ntu,accuracy,f1,ROC_AUC,cross_entropy
+Ballycanew_observed,validation,temporal_ridge,365,8.36148376305208,15.23686135777363,9.26575,,,,
+Ballycanew_observed,validation,logistic_alert,365,,,9.26575,0.8410958904109589,0.5857142857142857,0.8405847953216375,0.4050475015575458
+Ballycanew_observed,test,temporal_ridge,365,9.300423491471848,18.652091442042288,9.26575,,,,
+Ballycanew_observed,test,logistic_alert,365,,,9.26575,0.8164383561643835,0.5314685314685315,0.7774657639636866,0.45983299587212106

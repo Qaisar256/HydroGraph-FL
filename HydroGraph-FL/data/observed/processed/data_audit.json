@@ -1,0 +1,28 @@
+{
+  "input_files": [
+    "Ballycanew_Turbidity_Sediments.csv",
+    "Ballycanew_discharge.csv",
+    "Ballycanew_data.csv"
+  ],
+  "all_calendar_rows": 2922,
+  "calendar_first": "2009-01-01",
+  "calendar_last": "2016-12-31",
+  "nonmissing_turbidity": 2574,
+  "nonmissing_discharge": 2649,
+  "nonmissing_trp": 2649,
+  "complete_turbidity_and_discharge": 2574,
+  "supervised_rows": 2568,
+  "supervised_splits": {
+    "train": 1838,
+    "validation": 365,
+    "test": 365
+  },
+  "notes": [
+    "The supplied files cover one catchment, not 5 independent catchments or 35 monitoring sites.",
+    "Qcumecs was preserved without unit conversion because the variable magnitude and units must be independently verified.",
+    "No missing values are filled.",
+    "Additional monthly-distribution files and lognormal_observed_TRP.csv are not treated as timestamped field measurements.",
+    "No river-network edges can be inferred from this single site series.",
+    "Valid supervised rows have one-day-separated adjacent samples and lagged features."
+  ]
+}

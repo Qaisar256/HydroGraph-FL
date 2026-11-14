@@ -1,0 +1,2 @@
+n,mae_ntu,rmse_ntu,alert_accuracy_pct,alert_f1_pct,alert_auc,model,validation_mae_ntu,model_class,data_origin,physics_constraints_valid
+2940,2.078125232904136,2.68060659837857,89.82993197278911,87.98714343109683,0.9756640342822159,central,2.4698625888143266,GRU-directed-GNN,computer_generated,0

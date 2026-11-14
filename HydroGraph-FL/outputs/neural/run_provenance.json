@@ -1,0 +1,31 @@
+{
+  "data_origin": "computer_generated",
+  "seed": 20261109,
+  "train_group_days": 1475,
+  "validation_group_days": 400,
+  "test_group_days": 420,
+  "test_station_days": 2940,
+  "threshold_ntu": 32.36835877509783,
+  "physics_constraints_valid": 0,
+  "full_neural_model_executed": true,
+  "site_observations_used": false,
+  "config": {
+    "seed": 20261109,
+    "window": 14,
+    "hidden": 16,
+    "gru_layers": 1,
+    "gnn_layers": 1,
+    "dropout": 0.15,
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "batch": 32,
+    "epochs": 1,
+    "patience": 1,
+    "rounds": 1,
+    "local_epochs": 1,
+    "prox_mu": 0.01,
+    "physics_weight": 0.0,
+    "qde_generations": 2,
+    "qde_trial_epochs": 3
+  }
+}
