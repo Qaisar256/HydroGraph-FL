@@ -1,40 +1,77 @@
-# HydroGraph-FL: Physics-Guided Federated Spatiotemporal Graph Learning for River Water Quality Prediction
+# HydroGraph-FL: Hydrology-Aware Federated Spatiotemporal Graph Learning for River Water Quality Forecasting
 
-HydroGraph-FL is a Python-based research framework for river-water-quality forecasting using **Gated Recurrent Units (GRU), Graph Neural Networks (GNN), physics-guided learning, federated optimization, and Quantum-Inspired Differential Evolution (QDE)**. The framework integrates temporal water-quality observations, streamflow information, and directed upstream–downstream river connectivity to support next-day turbidity prediction and high-turbidity early warning.
+**HydroGraph-FL** is a Python-based research framework for river-water-quality forecasting that integrates Gated Recurrent Units (GRU), directed Graph Neural Networks (GNN), hydrology-aware learning, Federated Learning (FL), and Quantum-Inspired Differential Evolution (QDE). The framework combines historical water-quality measurements, streamflow observations, and upstream–downstream hydrological connectivity to support next-day turbidity forecasting and early-warning classification.
 
-The project investigates decentralized learning across multiple river catchments while preserving local data ownership and incorporating hydrological relationships into predictive modeling.
+The project provides reproducible preprocessing, forecasting baselines, neural-model implementations, and federated optimization workflows for investigating water-quality prediction across distributed river-monitoring networks.
 
 ## Key Features
 
-- **GRU Temporal Encoder:** Learns temporal patterns from historical water-quality and streamflow observations.
-- **Directed Graph Neural Network:** Models upstream–downstream relationships through edge-aware message passing.
-- **Physics-Guided Regularization:** Supports conditional sediment-transport constraints when the required physical observations are available.
-- **Federated Learning:** Implements FedAvg and FedProx for distributed model training across catchments.
-- **QDE Hyperparameter Optimization:** Provides a quantum-inspired differential evolution approach for model configuration.
-- **Water Quality Early Warning:** Supports next-day turbidity prediction and threshold-based alert classification.
-- **Reproducible Evaluation:** Includes chronological partitioning, baseline comparisons, model checkpoints, and performance metrics.
-- **Field Data Integration:** Provides Python scripts for retrieving water-quality observations and discharge measurements from WQP and USGS.
+- **GRU Temporal Encoding:** Extracts temporal dependencies from historical turbidity, discharge, and related water-quality measurements.
+- **Directed Graph Learning:** Supports upstream–downstream information propagation through hydrologically defined graph connections.
+- **Hydrology-Aware Regularization:** Incorporates conditional transport-based constraints when sufficient physical observations are available.
+- **Federated Learning:** Implements FedAvg and FedProx for collaborative model training across independent catchment clients.
+- **QDE Hyperparameter Optimization:** Provides quantum-inspired differential evolution for neural-model hyperparameter selection.
+- **Water-Quality Early Warning:** Supports next-day turbidity forecasting and training-derived threshold-based alert classification.
+- **Reproducible Evaluation:** Includes chronological data partitioning, forecasting baselines, performance metrics, and model-training utilities.
+- **Field-Data Integration:** Supports observational datasets and data retrieval from environmental monitoring services.
 
-## Dataset
+## Datasets
 
-The repository includes a reproducible simulation-based benchmark containing:
+### 1. Ballycanew Field-Observation Dataset
 
-- **5** directed river catchments
-- **35** monitoring stations
-- **540** daily observations per station
-- **18,900** station-day records
-- **2,940** held-out forecasting observations
+The project includes observational water-quality data from the **Ballycanew agricultural catchment, County Wexford, Ireland**, originally reported by Negri et al. (2024).
 
-Additional observed water-quality and streamflow records can be downloaded from:
+The merged dataset covers **2009–2016** and contains:
+
+| Dataset characteristic | Value |
+|---|---:|
+| Daily calendar records | 2,922 |
+| Available turbidity observations | 2,574 |
+| Available discharge observations | 2,649 |
+| Available TRP observations | 2,649 |
+| Valid one-day-ahead forecasting samples | 2,568 |
+
+The forecasting data are partitioned chronologically:
+
+| Partition | Period | Samples | Percentage |
+|---|---|---:|---:|
+| Training | 2009–2014 | 1,838 | 71.57% |
+| Validation | 2015 | 365 | 14.21% |
+| Testing | 2016 | 365 | 14.21% |
+
+The dataset supports temporal forecasting, discharge-dependent analysis, and high-turbidity classification. Because it represents one monitored catchment, it does not independently establish multi-client federated learning or directed multi-station graph performance.
+
+**Original dataset:** https://github.com/CamillaNegri/Ballycanew_Ptool
+
+**Reference:** Negri C, Mellander P-E, Schurch N, Wade AJ, Gagkas Z, Wardell-Johnson DH, Adams K, Glendell M (2024). Bayesian network modelling of phosphorus pollution in agricultural catchments with high-resolution data. *Environmental Modelling & Software*, 178, 106073. https://doi.org/10.1016/j.envsoft.2024.106073
+
+### 2. Reproducible River-Network Benchmark
+
+A separate computational benchmark supports controlled evaluation of temporal predictors, upstream features, and federated linear optimization.
+
+| Benchmark characteristic | Value |
+|---|---:|
+| Catchments | 5 |
+| Monitoring stations | 35 |
+| Daily observations per station | 540 |
+| Station-day records | 18,900 |
+| Held-out forecasting observations | 2,940 |
+| Random seed | 20261109 |
+
+The benchmark is simulation-based and is evaluated independently of the Ballycanew field observations. Results from the benchmark must not be reported as measured field-data performance.
+
+### 3. Additional Environmental Data Sources
+
+The project includes utilities for accessing additional river-water-quality and hydrological observations.
 
 - Water Quality Portal: https://www.waterqualitydata.us/
 - USGS Water Data: https://waterdata.usgs.gov/
 
-The included data-download scripts support obtaining and preprocessing available observations. Field-data validation is separate from the simulation-based benchmark.
+These services can support future multi-catchment validation after monitoring stations, discharge gauges, measurement units, and hydrological connectivity have been verified.
 
 ## Installation
 
-Requires Python 3.10 or later.
+**Requirements:** Python 3.10 or later.
 
 ```bash
 git clone https://github.com/Qaisar256/HydroGraph-FL.git
@@ -44,25 +81,44 @@ pip install -r requirements.txt
 
 ## Running HydroGraph-FL
 
-Run the neural training and evaluation pipeline:
+### Neural Architecture and Federated Training
+
+Run the complete set of supported neural experimentation modes:
 
 ```bash
 python run_neural.py --mode all
 ```
 
-Run a shortened implementation test:
+Run individual training configurations:
+
+```bash
+# Federated Averaging
+python run_neural.py --mode fedavg
+
+# Federated Proximal Optimization
+python run_neural.py --mode fedprox
+
+# QDE-based hyperparameter optimization
+python run_neural.py --mode qde
+```
+
+Run a shortened functionality test:
 
 ```bash
 python run_neural.py --mode all --quick
 ```
 
-Download water-quality and streamflow observations:
+These commands support architectural experimentation. Successful execution does not imply that the complete model has achieved the performance reported for separate baseline estimators.
+
+### Download Environmental Observations
 
 ```bash
-python scripts/download_field_data.py --start 2019-01-01 --end 2025-12-31
+python scripts/download_field_data.py \
+  --start 2019-01-01 \
+  --end 2025-12-31
 ```
 
-Execute automated tests:
+### Automated Tests
 
 ```bash
 python -m unittest discover -s tests -v
@@ -70,20 +126,29 @@ python -m unittest discover -s tests -v
 
 ## Model Evaluation
 
-The framework supports the following evaluation metrics:
+The framework supports regression and classification evaluation through:
 
-- Mean Absolute Error (MAE)
-- Root Mean Squared Error (RMSE)
-- Classification Accuracy
-- Precision, Recall, and F1-score
-- Receiver Operating Characteristic Area Under the Curve (ROC-AUC)
-- Client-level performance and flow-regime analysis
+- Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE).
+- Classification accuracy, precision, recall, and F1-score.
+- Receiver Operating Characteristic Area Under the Curve (ROC-AUC).
+- Chronological validation and forward-chaining cross-validation.
+- Client-level forecasting performance.
+- Discharge-dependent prediction-error analysis.
+- Federated communication-round monitoring.
 
-The repository includes surrogate-model benchmarking and executable neural training workflows. Results from short functionality tests should not be interpreted as fully optimized model performance.
+## Experimental Results
+
+The research repository distinguishes the following experimental settings:
+
+**Computational benchmark:** Ridge regression and FedAvg-linear estimators were evaluated on common held-out benchmark observations. FedAvg Graph Linear achieved an MAE of 1.194 NTU and RMSE of 1.501 NTU. Graph-aware Ridge reduced MAE by 3.13% relative to temporal Ridge.
+
+**Ballycanew field-observation evaluation:** A GRU-based temporal classification prototype achieved 84.11% mean accuracy under ten-fold forward-chaining validation and 82.19% accuracy on the independent 2016 test set.
+
+**Proposed complete HydroGraph-FL architecture:** The integrated GRU–GNN, hydrology-aware regularization, FedAvg/FedProx, and QDE components are provided for research experimentation. The baseline results above must not be interpreted as experimentally verified performance of the complete architecture.
 
 ## Research Applications
 
-HydroGraph-FL is designed to investigate river turbidity forecasting, hydrological graph learning, decentralized environmental monitoring, streamflow-dependent prediction, and water-quality early-warning systems.
+HydroGraph-FL supports research in river-water-quality forecasting, streamflow-aware prediction, directed hydrological graph learning, distributed environmental monitoring, high-turbidity detection, and federated model optimization.
 
 ## Authors
 
@@ -91,14 +156,18 @@ HydroGraph-FL is designed to investigate river turbidity forecasting, hydrologic
 
 ## Code and Data Availability
 
-Source code, reproducibility scripts, and benchmark data are maintained at:
+Project repository:
 
 https://github.com/Qaisar256/HydroGraph-FL
 
+Original Ballycanew observations:
+
+https://github.com/CamillaNegri/Ballycanew_Ptool
+
 ## Research Status
 
-HydroGraph-FL is a research implementation. Its GRU–GNN architecture, federated training methods, and QDE optimization workflow are implemented for experimentation. 
+HydroGraph-FL is an experimental research framework. Its Python implementation supports GRU–GNN modeling, FedAvg/FedProx optimization, QDE hyperparameter search, and baseline evaluation. Full multi-catchment field validation, calibrated hydrological transport constraints, and security-aware federated deployment remain subjects of further research.
 
 ## License
 
-Please refer to the repository's `LICENSE` file.
+See the repository's `LICENSE` file for the applicable software license. Original third-party datasets remain subject to their respective source licenses and attribution requirements.
